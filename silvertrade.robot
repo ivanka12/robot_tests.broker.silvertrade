@@ -204,6 +204,7 @@ Login
 
 Оновити сторінку з тендером
   [Arguments]  ${username}  ${tender_uaid}
+  Switch Browser  ${my_alias}
   silvertrade.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 
 Внести зміни в тендер
@@ -253,7 +254,7 @@ Login
   Input Text  name=Question[title]  ${question.data.title}
   Input Text  name=Question[description]  ${question.data.description}
   Click Element  name=question_submit
-  Wait Until Page Contains Element  xpath=//div[contains(@class,'alert-success')]  30
+  Wait Until Keyword Succeeds  20 x  1 s  Element Should Be Visible  xpath=//div[contains(@class,'alert-success')]
 
 Задати запитання на тендер
   [Arguments]  ${username}  ${tender_uaid}  ${question}
@@ -272,7 +273,7 @@ Login
   Wait Until Element Is Visible  xpath=//*[contains(text(),'${question_id}')]/../descendant::textarea[contains(@name,'[answer]')]
   Input text  xpath=//*[contains(text(),'${question_id}')]/../descendant::textarea[contains(@name,'[answer]')]  ${answer_data.data.answer}
   Scroll And Click  xpath=//*[contains(text(),'${question_id}')]/../descendant::button[@name="answer_question_submit"]
-  Wait Until Page Contains Element  xpath=//div[contains(@class,'alert-success')]  30
+  Wait Until Keyword Succeeds  20 x  1 s  Element Should Be Visible  xpath=//div[contains(@class,'alert-success')]
 
 ###############################################################################################################
 ###################################    ВІДОБРАЖЕННЯ ІНФОРМАЦІЇ    #############################################
@@ -280,6 +281,7 @@ Login
 
 Отримати інформацію із тендера
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
+  Switch Browser  ${my_alias}
   ${red}=  Evaluate  "\\033[1;31m"
   Click Element  xpath=//*[contains(@href, "tender/json/")]
   Run Keyword If  'title' in '${field_name}'  Execute Javascript  $("[data-test-id|='title']").css("text-transform", "unset")
@@ -380,7 +382,7 @@ Login
   ...  ELSE  Scroll And Click  xpath=//input[@id="bid-participate"]/..
   Run Keyword And Ignore Error  Дочекатися І Клікнути  xpath=//*[@id="bid-checkforunlicensed"]/..
   Click Element  xpath=//button[contains(text(), 'Відправити')]
-  Wait Until Page Contains Element  xpath=//div[contains(@class,'alert-success')]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class,'alert-success')]
   Опублікувати Пропозицію  ${status}
 
 Опублікувати Пропозицію
@@ -397,7 +399,7 @@ Login
 Скасувати цінову пропозицію
   [Arguments]  ${username}  ${tender_uaid}
   silvertrade.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
-  Click Element  xpath=//button[@name="delete_bids"]
+  Дочекатися І Клікнути  xpath=//button[@name="delete_bids"]
   Wait Until Element Is Visible  xpath=//button[@data-bb-handler="confirm"]
   Click Element  xpath=//button[@data-bb-handler="confirm"]
   Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//input[contains(@name, '[value][amount]')]
@@ -408,7 +410,7 @@ Login
   Wait Until Element Is Visible   xpath=//input[contains(@name, '[value][amount]')]
   ConvToStr And Input Text  xpath=//input[contains(@name, '[value][amount]')]  ${fieldvalue}
   Click Element  xpath=//button[contains(text(), 'Відправити')]
-  Wait Until Element Is Visible  xpath=//div[contains(@class,'alert-success')]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class,'alert-success')]
 
 Завантажити документ в ставку
   [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_type}=documents
@@ -418,7 +420,7 @@ Login
   ...  Select From List By Value  xpath=//input[contains(@value,"${path.split("/")[-1].split(".")[0]}")]/ancestor::*[@class="bid_file_wrap"]/descendant::*[@class="select_document_type"]  financialLicense
   ...  ELSE  Select From List By Value  xpath=//input[contains(@value,"${path.split("/")[-1].split(".")[0]}")]/ancestor::*[@class="bid_file_wrap"]/descendant::*[@class="select_document_type"]  commercialProposal
   Click Element  xpath=//button[contains(text(), 'Відправити')]
-  Wait Until Element Is Visible  xpath=//div[contains(@class,'alert-success')]
+  Wait Until Keyword Succeeds  10 x  1 s  Element Should Be Visible  xpath=//div[contains(@class,'alert-success')]
 
 Завантажити фінансову ліцензію
   [Arguments]  ${username}  ${tender_uaid}  ${filepath}
